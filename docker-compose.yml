@@ -1,0 +1,28 @@
+# Your Solution
+version: '3'
+services:
+  book_catalog:
+    image: book_catalog:1
+    build: 
+      context: ./book_catalog
+      dockerfile: Dockerfile
+    container_name: book_catalog
+    ports:
+      - 4000:80
+    environment:
+      - PORT=80
+      - DATABASE_URL=${DATABASE_URL}
+    restart: "no"
+  inventory_management: 
+    image: inventory_management:1
+    build:
+      context: ./inventory_management
+      dockerfile: Dockerfile
+    container_name: inventory_management
+    ports:
+      - 4001:80
+    environment:
+      - PORT=80
+      - DATABASE_URL=${DATABASE_URL}
+    restart: "no"
+    

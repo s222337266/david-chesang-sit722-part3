@@ -1,0 +1,22 @@
+# Your Solution
+apiVersion: apps/V1
+kind: Deployment
+metadata:
+  name: deakin_library
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: deakin_library
+  template:
+    metadata:
+      labels:
+        name: deakin_library
+    spec:
+      containers:
+      - name: book_catalog
+        image: davidbookcatalog.azurecr.io/book_catalog:1
+        imagePullPolicy: ifNotPresent
+        env:
+        - name: PORT
+          value: 80

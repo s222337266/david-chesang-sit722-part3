@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: book_catalog
     ports:
-      - 4000:80
+      - 4000:4000
     environment:
       - PORT=80
       - DATABASE_URL=${DATABASE_URL}
@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     container_name: inventory_management
     ports:
-      - 4001:80
+      - 4001:4001
     environment:
       - PORT=80
       - DATABASE_URL=${DATABASE_URL}

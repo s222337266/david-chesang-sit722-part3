@@ -1,22 +1,74 @@
 # Your Solution
-apiVersion: apps/V1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deakin_library
+  name: book-catalog
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: deakin_library
+      app: book-catalog
   template:
     metadata:
       labels:
-        name: deakin_library
+        app: book-catalog
     spec:
       containers:
-      - name: book_catalog
+      - name: book-catalog
         image: davidbookcatalog.azurecr.io/book_catalog:1
-        imagePullPolicy: ifNotPresent
+        imagePullPolicy: IfNotPresent
         env:
         - name: PORT
-          value: 80
+          value: "80"
+        - name: DATABASE_URL
+          value: "postgresql://david_book_catalog_user:rcaLCyW3I344I2Ku0aDGl60AvgKXgoNL@dpg-crjgpk5umphs73d0k5qg-a.oregon-postgres.render.com/david_book_catalog"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: inventory-management
+  template:
+    metadata:
+      labels:
+        app: inventory-management
+    spec:
+      containers:
+      - name: inventory-management
+        image: davidbookcatalog.azurecr.io/inventory_management:1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PORT
+          value: "80"
+        - name: DATABASE_URL
+          value: "postgresql://david_book_catalog_user:rcaLCyW3I344I2Ku0aDGl60AvgKXgoNL@dpg-crjgpk5umphs73d0k5qg-a.oregon-postgres.render.com/david_book_catalog"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog-service
+spec:
+  selector:
+    app: book-catalog
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 4000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-management-service
+spec:
+  selector:
+    app: inventory-management
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 4001
